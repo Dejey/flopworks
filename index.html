@@ -3387,7 +3387,7 @@ function drawFluid(g){
     const tex=fluidTex(FTEX,t);tex.getContext('2d').putImageData(fImg,0,0,x0,y0,x1-x0+1,y1-y0+1);
     if(gl){fluidGlowTex(t,gl,x0,x1,y0,y1);fluidTex(FGTEX,t).getContext('2d').putImageData(fImg,0,0,x0,y0,x1-x0+1,y1-y0+1);glows.push([t,x0,y0,x1,y1]);}
     const pat=g.createPattern(tex,'no-repeat');pat.setTransform(M);
-    const ne=fluidMarch(t,x0,x1,y0,y1);g.fillStyle=pat;g.beginPath();const nr=fluidLoops(g,ne);g.fill();
+    const ne=fluidMarch(t,Math.max(0,x0-1),Math.min(gw-1,x1+1),Math.max(0,y0-1),Math.min(gh-1,y1+1));g.fillStyle=pat;   /* one cell wider than the liquid's own box: zoomed out (big cells) the liquid can still be above the threshold in the box's last cell, and its edge is then between that cell and the empty one beyond. Left out, the outline did not close there and the fill went missing (all of the default view on a phone) */g.beginPath();const nr=fluidLoops(g,ne);g.fill();
     if(nr){g.beginPath();for(let q=0;q<nr;q+=2){const x=fRim[q];if(x!==x){q+=2;g.moveTo(fRim[q],fRim[q+1]);}else g.lineTo(x,fRim[q+1]);}
       if(FRIMSOFT[t]){g.strokeStyle=FRIMSOFT[t];g.lineWidth=Math.max(4.5,3.4/z);g.stroke();}
       g.strokeStyle=FRIM[t];g.lineWidth=Math.max(1.5,1.2/z);g.stroke();}
